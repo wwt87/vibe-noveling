@@ -1,5 +1,52 @@
 # 输出规格
 
+## HTML 可视化生成
+
+### 两个独立 HTML 文件
+
+故事梗概和大纲分别生成独立的 HTML 可视化文件：
+
+1. **故事梗概**：`chapters/vol-{v}/ch-{c}/synopsis-view.html`（因果链流程图）
+2. **大纲**：`chapters/vol-{v}/ch-{c}/outline-view.html`（纵向场景卡片）
+
+### 步骤 9a：故事梗概 HTML
+
+故事梗概确认后生成。读取 `{SKILL_DIR}/templates/synopsis-viewer.html`，注入 `PLAN_DATA`：
+
+```javascript
+const PLAN_DATA = {
+  chapterTitle: "第 X 章：标题",
+  volume: "01",
+  chapter: "0001",
+  metadata: { type: "推进章", density: "中", beat: "中点" },
+  synopsis: ["段落1", "段落2", ...]
+};
+```
+
+用户点击「复制故事梗概」后，JS 生成纯段落文本（段落间空行分隔），用户粘贴回对话后写入 `故事梗概.md`。
+
+### 步骤 9b：大纲 HTML
+
+大纲确认后生成。读取 `{SKILL_DIR}/templates/outline-viewer.html`，注入 `PLAN_DATA`：
+
+```javascript
+const PLAN_DATA = {
+  chapterTitle: "第 X 章：标题",
+  volume: "01",
+  chapter: "0001",
+  metadata: { type: "推进章", density: "中", beat: "中点" },
+  startingState: { realm: "...", location: "...", resources: "...", relationships: "...", recentChange: "..." },
+  taskCard: { mainTask: "...", mustAdvance: ["..."], canDelay: ["..."], suggestedEnd: "..." },
+  thinkingCard: { corePayoff: "...", protagStateChange: "...", coreConflictChain: "...", infoRelease: "...", chapterBoundary: "..." },
+  characters: [{ name: "...", role: "...", purpose: "..." }],
+  scenes: [{ title: "...", density: "高|中|低", narrative: "..." }],
+  endingGoals: ["..."],
+  foreshadowing: { recycle: ["..."], delay: ["..."], newPlant: ["..."] }
+};
+```
+
+用户点击「复制大纲」后，JS 生成格式与下方"Markdown 保存格式"完全一致的 Markdown，用户粘贴回对话后写入 `大纲.md`。
+
 ## 角色设定完整度验证
 
 **用户审阅通过大纲后，自动扫描每个出场角色的设定完整度。**
