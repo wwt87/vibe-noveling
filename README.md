@@ -1,8 +1,10 @@
 # Vibe Noveling
 
-**用 Claude Code 写小说的专业工作流工具包。**
+**用 Claude Code / Codex 写小说的专业工作流工具包。**
 
 一套完整的中文网络小说创作工作流，基于 Claude Code 的自定义 Skill + Agent 体系构建。从项目初始化到章节发布，覆盖小说创作的全流程。
+
+本 fork 额外提供 **Codex 本地 Skill 适配版**，见 [`codex/`](codex/README.md)。Codex 版不依赖 Claude Code 的 slash-command 插件机制，会把 `/novel-*` 语义解释为本地文件工作流，并复用原项目的参考文档、HTML 审阅模板和 Python 工具。
 
 针对GLM-5/GLM-5.1模型深度定制优化，其他模型的使用体验欢迎补充到ISSUE。
 
@@ -298,7 +300,40 @@
 
 **注意，请关闭Claude Code的思考模式，避免过度思考导致剧情丧失了创造性。**
 
-### 方式二：手动复制
+### 方式二：Codex 本地 Skill（本 fork 新增）
+
+如果你使用 Codex，可以安装本仓库内置的本地 Skill：
+
+```powershell
+git clone https://github.com/wwt87/vibe-noveling.git
+cd vibe-noveling
+Copy-Item -LiteralPath .\codex\skills\vibe-noveling -Destination "$env:USERPROFILE\.codex\skills\vibe-noveling" -Recurse -Force
+```
+
+重新打开 Codex 会话后即可使用：
+
+```text
+用 $vibe-noveling 初始化一个都市小说项目，书名《一个失业的39岁程序员》
+```
+
+Codex 版支持同一套语义：
+
+```text
+/novel-init
+/novel-discuss
+/novel-bookplan
+/novel-plan
+/novel-write
+/novel-revise
+/novel-sync
+/novel-name
+/novel-progress
+/novel-snapshot
+```
+
+这些不是 Claude Code 命令，而是由 Codex Skill 解释成本地文件读写、知识图谱脚本、命名器、进度图和快照工具。详细说明见 [`codex/README.md`](codex/README.md)。
+
+### 方式三：手动复制
 
 ```bash
 # 1. 克隆仓库
@@ -312,7 +347,7 @@ mkdir -p 你的项目/.claude/agents
 cp -r vibe-noveling/plugins/vibe-noveling/agents/* 你的项目/.claude/agents/
 ```
 
-### 方式三：符号链接（适合开发调试）
+### 方式四：符号链接（适合开发调试）
 
 ```bash
 ln -s /path/to/vibe-noveling/plugins/vibe-noveling/skills/novel-init .claude/skills/novel-init
@@ -328,6 +363,7 @@ ln -s /path/to/vibe-noveling/plugins/vibe-noveling/agents/writer-dazhongma.md .c
 ## 使用前提
 
 - [Claude Code CLI](https://claude.ai/code) 已安装
+- Codex 本地 Skill 适配版需要 Codex，并将 `codex/skills/vibe-noveling` 安装到 `~/.codex/skills/`
 - Python 3.10+（用于命名生成器、知识图谱、进度图表等脚本）
 - PyYAML（知识图谱依赖）：`pip install pyyaml`
 
@@ -373,6 +409,8 @@ your-novel/
 
 ## 快速开始
 
+### Claude Code
+
 ```bash
 # 1. 在 Claude Code 中初始化新项目
 /novel-init
@@ -396,12 +434,30 @@ your-novel/
 /novel-progress
 ```
 
+### Codex
+
+```text
+用 $vibe-noveling 初始化一个修真小说项目，书名《长生夜市》
+
+用 $vibe-noveling 讨论这本小说的主角、世界观和核心爽点
+
+用 $vibe-noveling 规划第一章
+
+用 $vibe-noveling 根据第一章大纲写正文
+```
+
+Codex 版默认把当前工作目录当作小说项目根目录；也可以在请求中显式给出项目路径。
+
 ## 仓库结构
 
 ```
 vibe-noveling/
 ├── .claude-plugin/
 │   └── marketplace.json       # Plugin marketplace 清单
+├── codex/
+│   ├── README.md              # Codex 本地 Skill 适配说明
+│   └── skills/
+│       └── vibe-noveling/      # 可复制到 ~/.codex/skills/ 的 Codex Skill
 ├── docs/
 │   └── plans/                 # 工作流调整与实现计划
 ├── plugins/

@@ -79,6 +79,22 @@ Scripts live inside this skill:
 
 Use `--project-root <path>` when available, or set `VIBE_NOVEL_PROJECT_ROOT=<path>`.
 
+## Install Notes
+
+When installed from this repository, the skill folder is:
+
+```text
+codex/skills/vibe-noveling/
+```
+
+Copy that folder to the Codex skills directory:
+
+```powershell
+Copy-Item -LiteralPath .\codex\skills\vibe-noveling -Destination "$env:USERPROFILE\.codex\skills\vibe-noveling" -Recurse -Force
+```
+
+Repository-level Codex usage notes live in `codex/README.md`.
+
 ## Attribution
 
 This skill adapts the public MIT-licensed `TulanCN/vibe-noveling` Claude Code plugin into a local Codex workflow while keeping the original workflow concepts, references, templates, and helper scripts available as bundled resources.
