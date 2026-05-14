@@ -1,0 +1,7 @@
+interface:
+  display_name: "Vibe Noveling"
+  short_description: "Run Chinese web novel workflows locally"
+  default_prompt: "Use $vibe-noveling to initialize, plan, draft, revise, and sync a local Chinese web novel project."
+
+policy:
+  allow_implicit_invocation: true
